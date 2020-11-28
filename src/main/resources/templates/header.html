@@ -1,0 +1,15 @@
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" 
+          xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" th:href="@{/}">TODOs List</a>
+            </div>
+        </div>
+    </nav>
+    <div sec:authorize="isAuthenticated()">
+        <form th:action="@{/logout}">
+            <input type="submit" value="LogOut"/>
+        </form>
+    </div>
+</div>

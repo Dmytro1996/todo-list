@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+    <head>
+        <title>Login Page</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"/>
+    </head>
+    <body>
+        <h1>Login Page</h1>
+        <div th:if="${param.error}">Invalid username or password</div>
+        <div th:if="${param.logout}">You have been logged out</div>
+        <form th:action="@{/login}" method="POST">
+            <table>                
+                <tr>
+                    <td><label>Username:</label></td>
+                    <td><input type="text" name="username" id="username"/></td>
+                </tr>
+                <tr>
+                    <td><label>Password:</label></td>
+                    <td><input type="password" name="password" id="password"/></td>
+                </tr>                
+            </table>
+            <input type="submit" value="Login"/>
+        </form>
+        <div>Don't have an account?<a th:href="@{/users/create}">Register now</a></div>
+    </body>
+</html>
