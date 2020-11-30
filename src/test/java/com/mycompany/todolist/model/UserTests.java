@@ -65,61 +65,11 @@ public class UserTests {
         Set<ConstraintViolation<User>> violations = validator.validate(validUser);
 
         assertEquals(0, violations.size());
-    }
-    
-    @Test
-    void userWithValidFirstName() {
-        User user = new User();
-        user.setEmail("rty5@i.ua");
-        user.setFirstName("Validname");
-        user.setLastName("Validname");
-        user.setPassword("qwQW12");
-        user.setRole(traineeRole);
-
-
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-        Set<ConstraintViolation<User>> violations = validator.validate(user);
-
-        assertEquals(0, violations.size());
-        assertEquals("Validname",user.getFirstName());
-    }
-    
-    @Test
-    void userWithValidLastName() {
-        User user = new User();
-        user.setEmail("rty5@i.ua");
-        user.setFirstName("Validname");
-        user.setLastName("Validname");
-        user.setPassword("qwQW12");
-        user.setRole(traineeRole);
-
-
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-        Set<ConstraintViolation<User>> violations = validator.validate(user);
-
-        assertEquals(0, violations.size());
-        assertEquals("Validname",user.getLastName());
-    }
-    
-    @Test
-    void userWithValidPassword() {
-        User user = new User();
-        user.setEmail("rty5@i.ua");
-        user.setFirstName("Validname");
-        user.setLastName("Validname");
-        user.setPassword("qwQW12");
-        user.setRole(traineeRole);
-
-
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-        Set<ConstraintViolation<User>> violations = validator.validate(user);
-
-        assertEquals(0, violations.size());
-        assertEquals("qwQW12",user.getPassword());
-    }
+        assertEquals("Validname",validUser.getFirstName());
+        assertEquals("Validname",validUser.getLastName());
+        assertEquals("valid@cv.edu.ua",validUser.getEmail());
+        assertEquals("qwQW12",validUser.getPassword());
+    }    
     
     @Test
     void userWithValidRole() {
