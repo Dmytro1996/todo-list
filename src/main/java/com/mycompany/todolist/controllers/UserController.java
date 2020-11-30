@@ -20,8 +20,7 @@ public class UserController {
     private final UserService userService;
     private final RoleService roleService;
     @Autowired
-    private BCryptPasswordEncoder passEncoder;
-    private Logger logger=LoggerFactory.getLogger(UserController.class);
+    private BCryptPasswordEncoder passEncoder;    
 
     public UserController(UserService userService, RoleService roleService) {
         this.userService = userService;
@@ -38,8 +37,7 @@ public class UserController {
     public String create(@Validated @ModelAttribute("user") User user, BindingResult result) {
         if (result.hasErrors()) {
             return "create-user";
-        }
-        logger.info(passEncoder.encode(user.getPassword()));
+        }        
         user.setPassword(passEncoder.encode(user.getPassword()));
         user.setRole(roleService.readById(2));
         User newUser = userService.create(user);
@@ -65,7 +63,7 @@ public class UserController {
     @PostMapping("/{id}/update")
     public String update(@PathVariable long id, Model model, @Validated @ModelAttribute("user") User user, @RequestParam("roleId") long roleId, BindingResult result) {
         User oldUser = userService.readById(id);
-        if (result.hasErrors()) {
+        if (result.hasErrors()) {            
             user.setRole(oldUser.getRole());
             model.addAttribute("roles", roleService.getAll());
             return "update-user";

@@ -1,7 +1,5 @@
 package com.mycompany.todolist.controllers;
 
-//import com.softserve.itacademy.dto.TaskDto;
-//import com.softserve.itacademy.dto.TaskTransformer;
 import com.mycompany.todolist.model.Priority;
 import com.mycompany.todolist.model.Task;
 import com.mycompany.todolist.service.StateService;
@@ -30,8 +28,7 @@ public class TaskController {
     }
 
     @GetMapping("/create/todos/{todo_id}")
-    public String create(@PathVariable("todo_id") long todoId, Model model) {
-        //model.addAttribute("task", new TaskDto());
+    public String create(@PathVariable("todo_id") long todoId, Model model) {        
         model.addAttribute("task", new Task());
         model.addAttribute("todo", todoService.readById(todoId));
         model.addAttribute("priorities", Priority.values());
@@ -45,12 +42,7 @@ public class TaskController {
             model.addAttribute("todo", todoService.readById(todoId));
             model.addAttribute("priorities", Priority.values());
             return "create-task";
-        }
-        /*Task task = TaskTransformer.convertToEntity(
-                taskDto,
-                todoService.readById(taskDto.getTodoId()),
-                stateService.getByName("New")
-        );*/
+        }        
         task.setTodo(todoService.readById(todoId));
         task.setState(stateService.getByName("New"));        
         taskService.create(task);        
@@ -58,8 +50,7 @@ public class TaskController {
     }
 
     @GetMapping("/{task_id}/update/todos/{todo_id}")
-    public String update(@PathVariable("task_id") long taskId, @PathVariable("todo_id") long todoId, Model model) {
-        //TaskDto taskDto = TaskTransformer.convertToDto(taskService.readById(taskId));
+    public String update(@PathVariable("task_id") long taskId, @PathVariable("todo_id") long todoId, Model model) {        
         Task task=taskService.readById(taskId);
         model.addAttribute("task", task);
         model.addAttribute("stateId",task.getState().getId());
@@ -80,12 +71,7 @@ public class TaskController {
             model.addAttribute("states", stateService.getAll());
             logger.info("Before update-task");
             return "update-task";
-        }
-        /*Task task = TaskTransformer.convertToEntity(
-                taskDto,
-                todoService.readById(taskDto.getTodoId()),
-                stateService.readById(taskDto.getStateId())
-        );*/
+        }        
         logger.info("Before task.setTodo");
         task.setTodo(todoService.readById(todoId));
         logger.info("Before taskService.update()");
