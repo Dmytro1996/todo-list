@@ -5,7 +5,6 @@
  */
 package com.mycompany.todolist.controller;
 
-//import com.softserve.itacademy.dto.TaskDto;
 import com.mycompany.todolist.model.Priority;
 import com.mycompany.todolist.model.State;
 import com.mycompany.todolist.model.Task;
@@ -22,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -86,20 +86,17 @@ public class TaskControllerTests {
     @Test
     public void createWithInvalidDataTest() throws Exception{
         mockMvc.perform(MockMvcRequestBuilders.get("/tasks/create/todos/20"))                
-                .andExpect(MockMvcResultMatchers.status().is4xxClientError())
-                //.andExpect(MockMvcResultMatchers.model().attributeExists("message"))
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError())                
                 .andExpect(MockMvcResultMatchers.model().attributeExists("infos"))
-                .andExpect(MockMvcResultMatchers.model().attribute("infos",Arrays.asList("To-Do with id 20 not found")));
-                //.andExpect(MockMvcResultMatchers.model().attribute("message","To-Do with id 20 not found"))
-                //.andExpect(MockMvcResultMatchers.model().attribute("code","404 / Not Found"));        
+                .andExpect(MockMvcResultMatchers.model().attribute("infos",Arrays.asList("To-Do with id 20 not found")));                        
     }
     
     @WithMockUser("spring")
     @Test
     public void createPostTest() throws Exception{
         mockMvc.perform(MockMvcRequestBuilders.post("/tasks/create/todos/8")
-                .param("name","SomeTask").param("priority",Priority.MEDIUM.toString()))
-                //.param("stateId","5").param("todoId", "8"))
+                .param("name","SomeTask").param("priority",Priority.MEDIUM.toString())
+                .with(csrf()))                
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
     }
     
@@ -132,8 +129,7 @@ public class TaskControllerTests {
     @Test
     public void updatePostTest() throws Exception{
         mockMvc.perform(MockMvcRequestBuilders.post("/tasks/7/update/todos/7")
-                .param("name","SomeTask").param("priority",Priority.MEDIUM.toString()).param("id", "7"))
-                //.param("stateId","5").param("id", "7").param("todo",todoService.readById(7)))
+                .param("name","SomeTask").param("priority",Priority.MEDIUM.toString()).param("id", "7").with(csrf()))                
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
     }
     
@@ -143,15 +139,7 @@ public class TaskControllerTests {
         mockMvc.perform(MockMvcRequestBuilders.get("/tasks/20/update/todos/7"))                
                 .andExpect(MockMvcResultMatchers.status().is4xxClientError())
                 .andExpect(MockMvcResultMatchers.model().attributeExists("infos"))
-                .andExpect(MockMvcResultMatchers.model().attribute("infos",Arrays.asList("Task with id 20 not found")));
-                /*.andExpect(MockMvcResultMatchers.model().attributeExists("message"))
-                .andExpect(MockMvcResultMatchers.model().attributeExists("code"))
-                .andExpect(MockMvcResultMatchers.model().attribute("message","Task with id 20 not found"))
-                .andExpect(MockMvcResultMatchers.model().attribute("code","404 / Not Found"));
-        mockMvc.perform(MockMvcRequestBuilders.post("/tasks/7/update/todos/7")
-                .param("name","   ").param("priority",Priority.MEDIUM.toString())
-                .param("stateId","5").param("todoId", "8"))
-                .andExpect(MockMvcResultMatchers.status().isOk());*/
+                .andExpect(MockMvcResultMatchers.model().attribute("infos",Arrays.asList("Task with id 20 not found")));                
     }
     
     @WithMockUser("spring")
@@ -166,12 +154,9 @@ public class TaskControllerTests {
     public void deleteByInValidIdTest() throws Exception{
          mockMvc.perform(MockMvcRequestBuilders.get("/tasks/20/delete/todos/7"))                
                 .andExpect(MockMvcResultMatchers.status().is4xxClientError())
-                 .andExpect(MockMvcResultMatchers.model().attributeExists("infos"))
-                .andExpect(MockMvcResultMatchers.model().attribute("infos",Arrays.asList("Task with id 20 not found")));
-                /*.andExpect(MockMvcResultMatchers.model().attributeExists("message"))
-                .andExpect(MockMvcResultMatchers.model().attributeExists("code"))
-                .andExpect(MockMvcResultMatchers.model().attribute("message","Task with id 20 not found"))
-                .andExpect(MockMvcResultMatchers.model().attribute("code","404 / Not Found"));*/
+                .andExpect(MockMvcResultMatchers.model().attributeExists("infos"))
+                .andExpect(MockMvcResultMatchers.model().attribute("infos",
+                        Arrays.asList("Task with id 20 not found")));                
     }
     
 }

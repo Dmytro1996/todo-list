@@ -17,6 +17,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.security.test.context.support.WithMockUser;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -49,7 +50,7 @@ public class ToDoControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/todos/create/users/{owner_id}", "4")
                 .param("createdAt", "10-10-2017")
                 .param("title", "Title")
-                .param("ownerId", "4")
+                .param("ownerId", "4").with(csrf())
         )
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
 

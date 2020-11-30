@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -81,7 +82,7 @@ public class UserControllerTests {
     public void createPostTest() throws Exception{        
         mockMvc.perform(MockMvcRequestBuilders.post("/users/create").param("firstName","Bob")
                 .param("lastName", "Robertson").param("email","bobrobertson@mail.com")
-                .param("password","Aa12345678"))
+                .param("password","Aa12345678").with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection());               
     }
     
@@ -90,7 +91,7 @@ public class UserControllerTests {
     public void createPostWithInvalidDataTest() throws Exception{
         mockMvc.perform(MockMvcRequestBuilders.post("/users/create").param("firstName","bob")
                 .param("lastName", "Robertson").param("email","bobrobertson@mail.com")
-                .param("password","Aa12345678"))
+                .param("password","Aa12345678").with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().isOk());                
     }
     
@@ -112,8 +113,7 @@ public class UserControllerTests {
     public void readTestWithInValidId() throws Exception{
         mockMvc.perform(MockMvcRequestBuilders.get("/users/20/read"))
                 .andExpect(MockMvcResultMatchers.status().is4xxClientError())
-                .andExpect(MockMvcResultMatchers.model().attributeExists("infos"))
-                //.andExpect(MockMvcResultMatchers.model().attributeExists("code"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("infos"))                
                 .andExpect(MockMvcResultMatchers.model().attribute("infos",Arrays.asList("User with id 20 not found")));
     }
     
@@ -143,7 +143,7 @@ public class UserControllerTests {
         User user=userService.readById(5);
         mockMvc.perform(MockMvcRequestBuilders.post("/users/5/update?roleId=1").param("firstName","Bob")
                 .param("lastName", "Robertson").param("email",user.getEmail())
-                .param("password",user.getPassword()))
+                .param("password",user.getPassword()).with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection()); 
     }
     
@@ -154,7 +154,7 @@ public class UserControllerTests {
         List<Role> expectedRoles=roleService.getAll();
         mockMvc.perform(MockMvcRequestBuilders.post("/users/5/update?roleId=1").param("firstName","bob")
                 .param("lastName", "Robertson").param("email",user.getEmail())
-                .param("password",user.getPassword()))
+                .param("password",user.getPassword()).with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().is5xxServerError());               
     }
     
@@ -170,8 +170,7 @@ public class UserControllerTests {
     public void deleteByInvalidIdTest() throws Exception{
         mockMvc.perform(MockMvcRequestBuilders.get("/users/20/delete"))
                 .andExpect(MockMvcResultMatchers.status().is4xxClientError())
-                .andExpect(MockMvcResultMatchers.model().attributeExists("infos"))
-                //.andExpect(MockMvcResultMatchers.model().attributeExists("code"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("infos"))                
                 .andExpect(MockMvcResultMatchers.model().attribute("infos",Arrays.asList("User with id 20 not found")));
     }    
     
